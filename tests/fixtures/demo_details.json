@@ -1,0 +1,569 @@
+[
+ {
+  "set": false,
+  "name": "RootDirectory=/RootImage=",
+  "json_field": "RootDirectoryOrRootImage",
+  "description": "Service runs within the host's root directory",
+  "exposure": "0.1"
+ },
+ {
+  "set": null,
+  "name": "SupplementaryGroups=",
+  "json_field": "SupplementaryGroups",
+  "description": "Service runs as root, option does not matter",
+  "exposure": null
+ },
+ {
+  "set": null,
+  "name": "RemoveIPC=",
+  "json_field": "RemoveIPC",
+  "description": "Service runs as root, option does not apply",
+  "exposure": null
+ },
+ {
+  "set": false,
+  "name": "User=/DynamicUser=",
+  "json_field": "UserOrDynamicUser",
+  "description": "Service runs as root user",
+  "exposure": "0.4"
+ },
+ {
+  "set": false,
+  "name": "CapabilityBoundingSet=~CAP_SYS_TIME",
+  "json_field": "CapabilityBoundingSet_CAP_SYS_TIME",
+  "description": "Service processes may change the system clock",
+  "exposure": "0.2"
+ },
+ {
+  "set": true,
+  "name": "NoNewPrivileges=",
+  "json_field": "NoNewPrivileges",
+  "description": "Service processes cannot acquire new privileges",
+  "exposure": null
+ },
+ {
+  "set": true,
+  "name": "AmbientCapabilities=",
+  "json_field": "AmbientCapabilities",
+  "description": "Service process does not receive ambient capabilities",
+  "exposure": null
+ },
+ {
+  "set": false,
+  "name": "PrivateDevices=",
+  "json_field": "PrivateDevices",
+  "description": "Service potentially has access to hardware devices",
+  "exposure": "0.2"
+ },
+ {
+  "set": false,
+  "name": "ProtectClock=",
+  "json_field": "ProtectClock",
+  "description": "Service may write to the hardware clock or system clock",
+  "exposure": "0.2"
+ },
+ {
+  "set": false,
+  "name": "CapabilityBoundingSet=~CAP_SYS_PACCT",
+  "json_field": "CapabilityBoundingSet_CAP_SYS_PACCT",
+  "description": "Service may use acct()",
+  "exposure": "0.1"
+ },
+ {
+  "set": false,
+  "name": "CapabilityBoundingSet=~CAP_KILL",
+  "json_field": "CapabilityBoundingSet_CAP_KILL",
+  "description": "Service may send UNIX signals to arbitrary processes",
+  "exposure": "0.1"
+ },
+ {
+  "set": false,
+  "name": "ProtectKernelLogs=",
+  "json_field": "ProtectKernelLogs",
+  "description": "Service may read from or write to the kernel log ring buffer",
+  "exposure": "0.2"
+ },
+ {
+  "set": false,
+  "name": "CapabilityBoundingSet=~CAP_WAKE_ALARM",
+  "json_field": "CapabilityBoundingSet_CAP_WAKE_ALARM",
+  "description": "Service may program timers that wake up the system",
+  "exposure": "0.1"
+ },
+ {
+  "set": false,
+  "name": "CapabilityBoundingSet=~CAP_(DAC_*|FOWNER|IPC_OWNER)",
+  "json_field": "CapabilityBoundingSet_CAP_DAC_FOWNER_IPC_OWNER",
+  "description": "Service may override UNIX file/IPC permission checks",
+  "exposure": "0.2"
+ },
+ {
+  "set": false,
+  "name": "ProtectControlGroups=",
+  "json_field": "ProtectControlGroups",
+  "description": "Service may modify the control group file system",
+  "exposure": "0.2"
+ },
+ {
+  "set": false,
+  "name": "CapabilityBoundingSet=~CAP_LINUX_IMMUTABLE",
+  "json_field": "CapabilityBoundingSet_CAP_LINUX_IMMUTABLE",
+  "description": "Service may mark files immutable",
+  "exposure": "0.1"
+ },
+ {
+  "set": false,
+  "name": "CapabilityBoundingSet=~CAP_IPC_LOCK",
+  "json_field": "CapabilityBoundingSet_CAP_IPC_LOCK",
+  "description": "Service may lock memory into RAM",
+  "exposure": "0.1"
+ },
+ {
+  "set": false,
+  "name": "ProtectKernelModules=",
+  "json_field": "ProtectKernelModules",
+  "description": "Service may load or read kernel modules",
+  "exposure": "0.2"
+ },
+ {
+  "set": false,
+  "name": "CapabilityBoundingSet=~CAP_SYS_MODULE",
+  "json_field": "CapabilityBoundingSet_CAP_SYS_MODULE",
+  "description": "Service may load kernel modules",
+  "exposure": "0.2"
+ },
+ {
+  "set": false,
+  "name": "CapabilityBoundingSet=~CAP_BPF",
+  "json_field": "CapabilityBoundingSet_CAP_BPF",
+  "description": "Service may load BPF programs",
+  "exposure": "0.1"
+ },
+ {
+  "set": false,
+  "name": "CapabilityBoundingSet=~CAP_SYS_TTY_CONFIG",
+  "json_field": "CapabilityBoundingSet_CAP_SYS_TTY_CONFIG",
+  "description": "Service may issue vhangup()",
+  "exposure": "0.1"
+ },
+ {
+  "set": false,
+  "name": "CapabilityBoundingSet=~CAP_SYS_BOOT",
+  "json_field": "CapabilityBoundingSet_CAP_SYS_BOOT",
+  "description": "Service may issue reboot()",
+  "exposure": "0.1"
+ },
+ {
+  "set": false,
+  "name": "CapabilityBoundingSet=~CAP_SYS_CHROOT",
+  "json_field": "CapabilityBoundingSet_CAP_SYS_CHROOT",
+  "description": "Service may issue chroot()",
+  "exposure": "0.1"
+ },
+ {
+  "set": false,
+  "name": "SystemCallArchitectures=",
+  "json_field": "SystemCallArchitectures",
+  "description": "Service may execute system calls with all ABIs",
+  "exposure": "0.2"
+ },
+ {
+  "set": false,
+  "name": "CapabilityBoundingSet=~CAP_BLOCK_SUSPEND",
+  "json_field": "CapabilityBoundingSet_CAP_BLOCK_SUSPEND",
+  "description": "Service may establish wake locks",
+  "exposure": "0.1"
+ },
+ {
+  "set": false,
+  "name": "MemoryDenyWriteExecute=",
+  "json_field": "MemoryDenyWriteExecute",
+  "description": "Service may create writable executable memory mappings",
+  "exposure": "0.1"
+ },
+ {
+  "set": false,
+  "name": "RestrictNamespaces=~user",
+  "json_field": "RestrictNamespaces_user",
+  "description": "Service may create user namespaces",
+  "exposure": "0.3"
+ },
+ {
+  "set": false,
+  "name": "RestrictNamespaces=~pid",
+  "json_field": "RestrictNamespaces_pid",
+  "description": "Service may create process namespaces",
+  "exposure": "0.1"
+ },
+ {
+  "set": false,
+  "name": "RestrictNamespaces=~net",
+  "json_field": "RestrictNamespaces_net",
+  "description": "Service may create network namespaces",
+  "exposure": "0.1"
+ },
+ {
+  "set": false,
+  "name": "RestrictNamespaces=~uts",
+  "json_field": "RestrictNamespaces_uts",
+  "description": "Service may create hostname namespaces",
+  "exposure": "0.1"
+ },
+ {
+  "set": false,
+  "name": "RestrictNamespaces=~mnt",
+  "json_field": "RestrictNamespaces_mnt",
+  "description": "Service may create file system namespaces",
+  "exposure": "0.1"
+ },
+ {
+  "set": false,
+  "name": "CapabilityBoundingSet=~CAP_LEASE",
+  "json_field": "CapabilityBoundingSet_CAP_LEASE",
+  "description": "Service may create file leases",
+  "exposure": "0.1"
+ },
+ {
+  "set": false,
+  "name": "CapabilityBoundingSet=~CAP_MKNOD",
+  "json_field": "CapabilityBoundingSet_CAP_MKNOD",
+  "description": "Service may create device nodes",
+  "exposure": "0.1"
+ },
+ {
+  "set": false,
+  "name": "RestrictNamespaces=~cgroup",
+  "json_field": "RestrictNamespaces_cgroup",
+  "description": "Service may create cgroup namespaces",
+  "exposure": "0.1"
+ },
+ {
+  "set": false,
+  "name": "RestrictSUIDSGID=",
+  "json_field": "RestrictSUIDSGID",
+  "description": "Service may create SUID/SGID files",
+  "exposure": "0.2"
+ },
+ {
+  "set": false,
+  "name": "RestrictNamespaces=~ipc",
+  "json_field": "RestrictNamespaces_ipc",
+  "description": "Service may create IPC namespaces",
+  "exposure": "0.1"
+ },
+ {
+  "set": false,
+  "name": "ProtectHostname=",
+  "json_field": "ProtectHostname",
+  "description": "Service may change system host/domainname",
+  "exposure": "0.1"
+ },
+ {
+  "set": false,
+  "name": "CapabilityBoundingSet=~CAP_(CHOWN|FSETID|SETFCAP)",
+  "json_field": "CapabilityBoundingSet_CAP_CHOWN_FSETID_SETFCAP",
+  "description": "Service may change file ownership/access mode/capabilities unrestricted",
+  "exposure": "0.2"
+ },
+ {
+  "set": false,
+  "name": "CapabilityBoundingSet=~CAP_SET(UID|GID|PCAP)",
+  "json_field": "CapabilityBoundingSet_CAP_SET_UID_GID_PCAP",
+  "description": "Service may change UID/GID identities/capabilities",
+  "exposure": "0.3"
+ },
+ {
+  "set": false,
+  "name": "LockPersonality=",
+  "json_field": "LockPersonality",
+  "description": "Service may change ABI personality",
+  "exposure": "0.1"
+ },
+ {
+  "set": false,
+  "name": "ProtectKernelTunables=",
+  "json_field": "ProtectKernelTunables",
+  "description": "Service may alter kernel tunables",
+  "exposure": "0.2"
+ },
+ {
+  "set": false,
+  "name": "RestrictAddressFamilies=~AF_PACKET",
+  "json_field": "RestrictAddressFamilies_AF_PACKET",
+  "description": "Service may allocate packet sockets",
+  "exposure": "0.2"
+ },
+ {
+  "set": false,
+  "name": "RestrictAddressFamilies=~AF_NETLINK",
+  "json_field": "RestrictAddressFamilies_AF_NETLINK",
+  "description": "Service may allocate netlink sockets",
+  "exposure": "0.1"
+ },
+ {
+  "set": false,
+  "name": "RestrictAddressFamilies=~AF_UNIX",
+  "json_field": "RestrictAddressFamilies_AF_UNIX",
+  "description": "Service may allocate local sockets",
+  "exposure": "0.1"
+ },
+ {
+  "set": false,
+  "name": "RestrictAddressFamilies=~\u2026",
+  "json_field": "RestrictAddressFamilies_OTHER",
+  "description": "Service may allocate exotic sockets",
+  "exposure": "0.3"
+ },
+ {
+  "set": false,
+  "name": "RestrictAddressFamilies=~AF_(INET|INET6)",
+  "json_field": "RestrictAddressFamilies_AF_INET_INET6",
+  "description": "Service may allocate Internet sockets",
+  "exposure": "0.3"
+ },
+ {
+  "set": false,
+  "name": "CapabilityBoundingSet=~CAP_MAC_*",
+  "json_field": "CapabilityBoundingSet_CAP_MAC",
+  "description": "Service may adjust SMACK MAC",
+  "exposure": "0.1"
+ },
+ {
+  "set": false,
+  "name": "RestrictRealtime=",
+  "json_field": "RestrictRealtime",
+  "description": "Service may acquire realtime scheduling",
+  "exposure": "0.1"
+ },
+ {
+  "set": false,
+  "name": "CapabilityBoundingSet=~CAP_SYS_RAWIO",
+  "json_field": "CapabilityBoundingSet_CAP_SYS_RAWIO",
+  "description": "Service has raw I/O access",
+  "exposure": "0.2"
+ },
+ {
+  "set": false,
+  "name": "CapabilityBoundingSet=~CAP_SYS_PTRACE",
+  "json_field": "CapabilityBoundingSet_CAP_SYS_PTRACE",
+  "description": "Service has ptrace() debugging abilities",
+  "exposure": "0.3"
+ },
+ {
+  "set": false,
+  "name": "CapabilityBoundingSet=~CAP_SYS_(NICE|RESOURCE)",
+  "json_field": "CapabilityBoundingSet_CAP_SYS_NICE_RESOURCE",
+  "description": "Service has privileges to change resource use parameters",
+  "exposure": "0.1"
+ },
+ {
+  "set": false,
+  "name": "DeviceAllow=",
+  "json_field": "DeviceAllow",
+  "description": "Service has no device ACL",
+  "exposure": "0.2"
+ },
+ {
+  "set": true,
+  "name": "PrivateTmp=",
+  "json_field": "PrivateTmp",
+  "description": "Service has no access to other software's temporary files",
+  "exposure": null
+ },
+ {
+  "set": false,
+  "name": "CapabilityBoundingSet=~CAP_NET_ADMIN",
+  "json_field": "CapabilityBoundingSet_CAP_NET_ADMIN",
+  "description": "Service has network configuration privileges",
+  "exposure": "0.2"
+ },
+ {
+  "set": false,
+  "name": "ProtectSystem=",
+  "json_field": "ProtectSystem",
+  "description": "Service has full access to the OS file hierarchy",
+  "exposure": "0.2"
+ },
+ {
+  "set": false,
+  "name": "ProtectProc=",
+  "json_field": "ProtectProc",
+  "description": "Service has full access to process tree (/proc hidepid=)",
+  "exposure": "0.2"
+ },
+ {
+  "set": false,
+  "name": "ProcSubset=",
+  "json_field": "ProcSubset",
+  "description": "Service has full access to non-process /proc files (/proc subset=)",
+  "exposure": "0.1"
+ },
+ {
+  "set": false,
+  "name": "ProtectHome=",
+  "json_field": "ProtectHome",
+  "description": "Service has full access to home directories",
+  "exposure": "0.2"
+ },
+ {
+  "set": false,
+  "name": "CapabilityBoundingSet=~CAP_NET_(BIND_SERVICE|BROADCAST|RAW)",
+  "json_field": "CapabilityBoundingSet_CAP_NET_BIND_SERVICE_BROADCAST_RAW)",
+  "description": "Service has elevated networking privileges",
+  "exposure": "0.1"
+ },
+ {
+  "set": false,
+  "name": "CapabilityBoundingSet=~CAP_AUDIT_*",
+  "json_field": "CapabilityBoundingSet_CAP_AUDIT",
+  "description": "Service has audit subsystem access",
+  "exposure": "0.1"
+ },
+ {
+  "set": false,
+  "name": "CapabilityBoundingSet=~CAP_SYS_ADMIN",
+  "json_field": "CapabilityBoundingSet_CAP_SYS_ADMIN",
+  "description": "Service has administrator privileges",
+  "exposure": "0.3"
+ },
+ {
+  "set": false,
+  "name": "PrivateNetwork=",
+  "json_field": "PrivateNetwork",
+  "description": "Service has access to the host's network",
+  "exposure": "0.5"
+ },
+ {
+  "set": false,
+  "name": "PrivateUsers=",
+  "json_field": "PrivateUsers",
+  "description": "Service has access to other users",
+  "exposure": "0.2"
+ },
+ {
+  "set": false,
+  "name": "CapabilityBoundingSet=~CAP_SYSLOG",
+  "json_field": "CapabilityBoundingSet_CAP_SYSLOG",
+  "description": "Service has access to kernel logging",
+  "exposure": "0.1"
+ },
+ {
+  "set": true,
+  "name": "KeyringMode=",
+  "json_field": "KeyringMode",
+  "description": "Service doesn't share key material with other services",
+  "exposure": null
+ },
+ {
+  "set": true,
+  "name": "Delegate=",
+  "json_field": "Delegate",
+  "description": "Service does not maintain its own delegated control group subtree",
+  "exposure": null
+ },
+ {
+  "set": false,
+  "name": "SystemCallFilter=~@clock",
+  "json_field": "SystemCallFilter_clock",
+  "description": "Service does not filter system calls",
+  "exposure": "0.2"
+ },
+ {
+  "set": false,
+  "name": "SystemCallFilter=~@cpu-emulation",
+  "json_field": "SystemCallFilter_cpu_emulation",
+  "description": "Service does not filter system calls",
+  "exposure": "0.1"
+ },
+ {
+  "set": false,
+  "name": "SystemCallFilter=~@debug",
+  "json_field": "SystemCallFilter_debug",
+  "description": "Service does not filter system calls",
+  "exposure": "0.2"
+ },
+ {
+  "set": false,
+  "name": "SystemCallFilter=~@module",
+  "json_field": "SystemCallFilter_module",
+  "description": "Service does not filter system calls",
+  "exposure": "0.2"
+ },
+ {
+  "set": false,
+  "name": "SystemCallFilter=~@mount",
+  "json_field": "SystemCallFilter_mount",
+  "description": "Service does not filter system calls",
+  "exposure": "0.2"
+ },
+ {
+  "set": false,
+  "name": "SystemCallFilter=~@obsolete",
+  "json_field": "SystemCallFilter_obsolete",
+  "description": "Service does not filter system calls",
+  "exposure": "0.1"
+ },
+ {
+  "set": false,
+  "name": "SystemCallFilter=~@privileged",
+  "json_field": "SystemCallFilter_privileged",
+  "description": "Service does not filter system calls",
+  "exposure": "0.2"
+ },
+ {
+  "set": false,
+  "name": "SystemCallFilter=~@raw-io",
+  "json_field": "SystemCallFilter_raw_io",
+  "description": "Service does not filter system calls",
+  "exposure": "0.2"
+ },
+ {
+  "set": false,
+  "name": "SystemCallFilter=~@reboot",
+  "json_field": "SystemCallFilter_reboot",
+  "description": "Service does not filter system calls",
+  "exposure": "0.2"
+ },
+ {
+  "set": false,
+  "name": "SystemCallFilter=~@resources",
+  "json_field": "SystemCallFilter_resources",
+  "description": "Service does not filter system calls",
+  "exposure": "0.2"
+ },
+ {
+  "set": false,
+  "name": "SystemCallFilter=~@swap",
+  "json_field": "SystemCallFilter_swap",
+  "description": "Service does not filter system calls",
+  "exposure": "0.2"
+ },
+ {
+  "set": false,
+  "name": "IPAddressDeny=",
+  "json_field": "IPAddressDeny",
+  "description": "Service does not define an IP address allow list",
+  "exposure": "0.2"
+ },
+ {
+  "set": true,
+  "name": "NotifyAccess=",
+  "json_field": "NotifyAccess",
+  "description": "Service child processes cannot alter service state",
+  "exposure": null
+ },
+ {
+  "set": true,
+  "name": "PrivateMounts=",
+  "json_field": "PrivateMounts",
+  "description": "Service cannot install system mounts",
+  "exposure": null
+ },
+ {
+  "set": false,
+  "name": "UMask=",
+  "json_field": "UMask",
+  "description": "Files created by service are world-readable by default",
+  "exposure": "0.1"
+ }
+]

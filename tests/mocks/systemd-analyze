@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# systemd-analyze mock: score depends on whether drop-ins exist for the unit.
+printf 'systemd-analyze %s\n' "$*" >>"$MOCK_LOG"
+unit=${*: -1}
+if compgen -G "$SHK_SYSTEMD_DIR/$unit.d/50-hardening-*.conf" >/dev/null; then
+  echo "-> Overall exposure level for $unit: 4.2 OK :-)"
+else
+  echo "-> Overall exposure level for $unit: 9.6 UNSAFE :-{"
+fi

@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# systemctl mock: logs calls; "is-active" result from $MOCK_ACTIVE (default 0 = active).
+printf 'systemctl %s\n' "$*" >>"$MOCK_LOG"
+case $1 in
+  is-active) exit "${MOCK_ACTIVE:-0}" ;;
+  *) exit 0 ;;
+esac

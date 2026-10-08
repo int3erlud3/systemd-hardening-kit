@@ -1,0 +1,164 @@
+#!/usr/bin/env bash
+# apply-dropin - install systemd-hardening-kit drop-in profiles for a service.
+# Dry-run by default: shows what would be written and the current exposure score.
+# With --apply: installs the drop-ins, reloads systemd and prints the new score.
+# With --restart: also restarts the service and rolls back if it does not come up.
+set -euo pipefail
+umask 022
+
+readonly VERSION="1.0.0"
+readonly PROG="${0##*/}"
+SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+DROPIN_SRC="${SHK_DROPIN_DIR:-$SCRIPT_DIR/../src/systemd_hardening_kit/dropins}"
+SYSTEMD_DIR="${SHK_SYSTEMD_DIR:-/etc/systemd/system}"
+APPLY=0
+RESTART=0
+UNIT=""
+PROFILES=()
+SHOW_BANNER=1
+
+# ---- banner (cosmetic: stderr only, interactive terminals only) -----------
+# Bastion Ops Toolkit banner. Disable with --no-banner or NO_BANNER=1. Not shown when
+# stderr is not a terminal (cron, pipes, systemd, monitoring agents).
+banner_enabled() {
+  (( SHOW_BANNER )) || return 1
+  [[ -z ${NO_BANNER:-} || ${NO_BANNER} == 0 ]] || return 1
+  [[ -t 2 ]]
+}
+
+print_banner() {
+  banner_enabled || return 0
+  {
+    cat <<'WORDMARK'
+              _                _
+   ____  _ __| |_ ___ _ __  __| |
+  (_-< || (_-<  _/ -_) '  \/ _` |
+  /__/\_, /__/\__\___|_|_|_\__,_|
+      |__/
+   _                _          _               _   _ _
+  | |_  __ _ _ _ __| |___ _ _ (_)_ _  __ _ ___| |_(_) |_
+  | ' \/ _` | '_/ _` / -_) ' \| | ' \/ _` |___| / / |  _|
+  |_||_\__,_|_| \__,_\___|_||_|_|_||_\__, |   |_\_\_|\__|
+                                     |___/
+
++====================================================================+
+|  SYSTEMD HARDENING KIT  ::  Service Sandboxing Toolkit             |
++--------------------------------------------------------------------+
+|  Hardened drop-ins and ranked systemd-analyze security reports     |
+WORDMARK
+    printf '|  %-64s  |\n' "v$VERSION  -  Bastion Ops Toolkit  -  by int3erlud3"
+    printf '%s\n\n' '+====================================================================+'
+  } >&2 || true
+}
+
+list_profiles() {
+  local f
+  for f in "$DROPIN_SRC"/*.conf; do
+    f=${f##*/}
+    printf '%s ' "${f%.conf}"
+  done
+}
+
+usage() {
+  cat <<USAGE
+Usage: $PROG [--apply [--restart]] UNIT.service PROFILE...
+
+Profiles: $(list_profiles)
+Drop-ins are written to $SYSTEMD_DIR/UNIT.service.d/50-hardening-PROFILE.conf
+
+Options:
+  --apply       write the drop-ins and run "systemctl daemon-reload" (default: dry-run)
+  --restart     with --apply: restart the unit; roll back if it fails to start
+  --no-banner   do not print the banner (or set NO_BANNER=1)
+  -h, --help    show this help
+  -V, --version show version
+
+Exit codes: 0 success, 1 service failed after restart (rolled back), 2 usage error
+USAGE
+}
+
+die() {
+  printf '%s: error: %s\n' "$PROG" "$1" >&2
+  exit "${2:-2}"
+}
+
+parse_args() {
+  for arg in "$@"; do
+    [[ $arg == --no-banner ]] && SHOW_BANNER=0
+  done
+  while [[ $# -gt 0 ]]; do
+    case $1 in
+      --apply) APPLY=1 ;;
+      --restart) RESTART=1 ;;
+      --no-banner) SHOW_BANNER=0 ;;
+      -h | --help) print_banner; usage; exit 0 ;;
+      -V | --version) print_banner; printf '%s %s\n' "$PROG" "$VERSION"; exit 0 ;;
+      -*) die "unknown option: $1" ;;
+      *)
+        if [[ -z $UNIT ]]; then UNIT=$1; else PROFILES+=("$1"); fi ;;
+    esac
+    shift
+  done
+  [[ -n $UNIT ]] || { usage >&2; die "no unit given"; }
+  [[ $UNIT =~ ^[A-Za-z0-9:_.@-]{1,240}\.service$ ]] || die "invalid unit name: $UNIT"
+  (( ${#PROFILES[@]} > 0 )) || die "no profile given"
+  local p
+  for p in "${PROFILES[@]}"; do
+    [[ $p =~ ^[a-z0-9-]+$ && -f $DROPIN_SRC/$p.conf ]] || die "unknown profile: $p"
+  done
+  if (( RESTART && ! APPLY )); then die "--restart requires --apply"; fi
+}
+
+score() {
+  systemd-analyze security --no-pager "$UNIT" 2>/dev/null | sed -n 's/^→ Overall exposure level for [^:]*: //p; s/^-> Overall exposure level for [^:]*: //p' | tail -n1
+}
+
+main() {
+  parse_args "$@"
+  print_banner
+  local dir="$SYSTEMD_DIR/$UNIT.d" p target before
+  before=$(score || true)
+  echo "unit:     $UNIT"
+  echo "exposure: ${before:-unknown} (before)"
+  if (( ! APPLY )); then
+    for p in "${PROFILES[@]}"; do
+      target="$dir/50-hardening-$p.conf"
+      echo
+      echo "--- would write $target"
+      grep -vE '^\s*(#|$)' "$DROPIN_SRC/$p.conf"
+    done
+    echo
+    echo "dry-run: nothing changed. Re-run with --apply (and --restart) to install."
+    exit 0
+  fi
+  if (( EUID != 0 )) && [[ -z ${SHK_SYSTEMD_DIR:-} ]]; then
+    die "--apply needs root (writes to $SYSTEMD_DIR)"
+  fi
+  install -d -m 0755 "$dir"
+  local written=()
+  for p in "${PROFILES[@]}"; do
+    target="$dir/50-hardening-$p.conf"
+    install -m 0644 "$DROPIN_SRC/$p.conf" "$target"
+    written+=("$target")
+    echo "installed $target"
+  done
+  systemctl daemon-reload
+  echo "exposure: $(score || echo unknown) (after)"
+  if (( RESTART )); then
+    if systemctl restart "$UNIT" && sleep "${SHK_SETTLE_SECONDS:-3}" && systemctl is-active --quiet "$UNIT"; then
+      echo "$UNIT restarted and active"
+    else
+      echo "$UNIT failed with the new drop-ins - rolling back" >&2
+      rm -f -- "${written[@]}"
+      rmdir --ignore-fail-on-non-empty -- "$dir" 2>/dev/null || true
+      systemctl daemon-reload
+      systemctl restart "$UNIT" || true
+      echo "rolled back; inspect: journalctl -u $UNIT -n 50" >&2
+      exit 1
+    fi
+  else
+    echo "not restarted: run 'systemctl restart $UNIT' and check 'systemctl status $UNIT'"
+  fi
+}
+
+main "$@"

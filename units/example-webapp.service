@@ -1,0 +1,68 @@
+# Fully hardened template for a small network service (e.g. a Python/Go web app on :8080).
+# Copy to /etc/systemd/system/, adjust ExecStart= and the directories, then:
+#   systemd-analyze verify example-webapp.service
+#   systemd-analyze security example-webapp.service      # expect an exposure around 1-2 (OK)
+[Unit]
+Description=Example web application (hardened template)
+Documentation=https://github.com/int3erlud3/systemd-hardening-kit
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/example-webapp --listen 127.0.0.1:8080
+Restart=on-failure
+RestartSec=5s
+
+# Identity: throw-away UID, private writable directories under /var/lib, /var/cache, /var/log
+DynamicUser=yes
+StateDirectory=example-webapp
+CacheDirectory=example-webapp
+LogsDirectory=example-webapp
+UMask=0077
+
+# File system
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+PrivateDevices=yes
+DevicePolicy=closed
+ProtectProc=invisible
+ProcSubset=pid
+PrivateMounts=yes
+
+# Kernel
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectKernelLogs=yes
+ProtectControlGroups=yes
+ProtectClock=yes
+ProtectHostname=yes
+
+# Privileges
+NoNewPrivileges=yes
+CapabilityBoundingSet=
+AmbientCapabilities=
+RestrictSUIDSGID=yes
+RemoveIPC=yes
+PrivateUsers=yes
+LockPersonality=yes
+MemoryDenyWriteExecute=yes
+RestrictRealtime=yes
+RestrictNamespaces=yes
+KeyringMode=private
+
+# System calls
+SystemCallArchitectures=native
+SystemCallFilter=@system-service
+SystemCallFilter=~@privileged @resources
+SystemCallErrorNumber=EPERM
+
+# Network: only IPv4/IPv6 sockets, only loopback and the local LAN
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+IPAddressDeny=any
+IPAddressAllow=localhost
+IPAddressAllow=10.0.0.0/8 172.16.0.0/12 192.168.0.0/16
+
+[Install]
+WantedBy=multi-user.target
